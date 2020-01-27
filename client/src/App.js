@@ -1,26 +1,62 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Nav from "./toggle"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+
+class App extends React.Component {
+
+  
+  state = {
+    players: []
+  };
+
+  
+
+  componentDidMount() {
+    fetch(`http://localhost:5000/api/players`)
+    .then (res => res.json())
+
+    .then (data => {
+      console.log(data)
+      this.setState({
+        ...this.state, players: data
+      })
+      
+    });  
+
+  }
+
+  
+  
+  render() {
+    return (
+      <div className="App-header" data-testid="playersInfo">
+        <Nav  />
+        {this.state.players.map((player) => {
+
+          return (
+            
+            <div className="container" >
+
+              <div className="name" >
+              Name: {player.name}
+              </div>
+
+              <div className="info" >
+              Country: {player.country} <br/>
+
+              Searches: {player.searches}
+              </div>
+
+            </div>
+            
+          )
+        })}
+
+      </div>
+        
+    )
+  }
+} 
 
 export default App;
